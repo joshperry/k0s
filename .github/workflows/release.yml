@@ -337,6 +337,17 @@ jobs:
           make check-conformance
         working-directory: ./inttest
 
+      - name: Upload conformance results
+        id: upload-conformance-results
+        uses: actions/upload-artifact@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ./inttest/sonobuoy/*_sonobuoy_*.tar.gz
+          name: sonoboy-conformance-results-${{ needs.release.outputs.tag_name }}.tar.gz
+          asset_content_type: application/gzip
+
       - name: Clean-Up Environment
         env:
           #K0S_VER: ${{ needs.release.outputs.tag_name }}
